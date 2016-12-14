@@ -1,0 +1,203 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LDS Scripture Flipper</title>
+    <script src="js/jquery.js" ></script>
+    <style>
+
+        .scripture_link {
+            position:relative;
+            float:clear;
+            margin:12px 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Scripture Flipper</h1>
+
+    <button id="random_chapter" >Random Chapter</button>
+
+
+    <div id="output"></div>
+<script>
+
+start_url = "https://www.lds.org/scriptures/";
+// Example finish url https://www.lds.org/scriptures/bofm/1-ne/16?lang=eng
+var books = {
+    "bofm": {
+        "bofm-title":"",
+        "introduction":"",
+        "three":"",
+        "eight":"",
+        "js":"",
+        "explanation":"",
+        "illustrations":"",
+        "1-ne": 22,
+        "2-ne": 33,
+        "jacob": 7,
+        "enos": 1,
+        "jarom": 1,
+        "omni": 1,
+        "w-of-m": 1,
+        "mosiah":29,
+        "alma":63,
+        "hel":16,
+        "3-ne":30,
+        "4-ne":1,
+        "morm":9,
+        "ether":15,
+        "moro":10
+    },
+    "bible":{
+        "bible/title-page":"",
+        "bible/dedication":"",
+        "ot/gen":50,
+        "ot/ex":40,
+        "ot/lev":27,
+        "ot/num":36,
+        "ot/deut":34,
+        "ot/josh":24,
+        "ot/judg":24,
+        "ot/ruth":4,
+        "ot/1-sam":31,
+        "ot/3-sam":24,
+        "ot/1-kgs":22,
+        "ot/2-kgs":25,
+        "ot/1-chr":29,
+        "ot/2-chr":36,
+        "ot/esra":10,
+        "ot/neh":13,
+        "ot/esth":10,
+        "ot/job":42,
+        "ot/ps":150,
+        "ot/prov":31,
+        "ot/eccl":12,
+        "ot/song":8,
+        "ot/isa":66,
+        "ot/jer":52,
+        "ot/lam":5,
+        "ot/ezek":48,
+        "ot/dan":12,
+        "ot/hosea":14,
+        "ot/joel":3,
+        "ot/amos":9,
+        "ot/obad":"",
+        "ot/jonah":4,
+        "ot/micah":7,
+        "ot/nahum":3,
+        "ot/hab":3,
+        "ot/zeph":3,
+        "ot/hag":2,
+        "ot/zech":14,
+        "ot/mal":4,
+
+        "nt/matt":28,
+        "nt/mark":16,
+        "nt/luke":24,
+        "nt/john":21,
+        "nt/acts":28,
+        "nt/rom":16,
+        "nt/1-cor":16,
+        "nt/2-cor":13,
+        "nt/gal":6,
+        "nt/eph":6,
+        "nt/philip":4,
+        "nt/col":4,
+        "nt/1-thes":5,
+        "nt/2-thes":2,
+        "nt/1-tim":6,
+        "nt/2-tim":4,
+        "nt/titus":3,
+        "nt/philem":"",
+        "nt/heb":13,
+        "nt/james":5,
+        "nt/1-pet":5,
+        "nt/2-pet":3,
+        "nt/1-jn":5,
+        "nt/2-jn":"",
+        "nt/3-jn":"",
+        "nt/jude":"",
+        "nt/rev":22
+
+
+
+
+    },
+    "dc-testament":{
+        "dc": 138
+    },  
+
+    "pgp":{
+        // "introduction":"",
+        "moses":8,
+        "abr":5,
+        // "abr/fac-1":"",
+        // "abr/fac-2":"",
+        // "abr/fac-3":"",
+        "pgp/js-m":1,
+        "js-h":1,
+        "a-of-f/1":1
+    }
+};
+
+
+    jQuery("#random_chapter").on('click', getScripture)
+    
+
+    function getScripture(){
+        
+        var url = start_url;
+        var book_name = pickRandomProperty(books);
+        var book_of =  pickRandomProperty(books[book_name]);
+        console.log("book_of: " + book_of)
+        if (book_of == "dc") {
+            chapter = getRandomInt(1, books[book_name][book_of]);
+            pushLinkToOutput(url + book_name +"/"+ book_of +"/" + chapter);    
+            return;
+        }
+        
+
+        if (book_name == "bible") {
+            chapter = getRandomInt(1, books[book_name][book_of]);
+            pushLinkToOutput(url + book_of +"/" + chapter);    
+            return;
+        }
+        
+        var chapter = books[book_name][book_of];
+        console.log("chapter is: " , chapter)
+        if (chapter == undefined) {
+            chapter = "";
+        }
+        else {
+            chapter = "/" + chapter;
+        }
+
+        pushLinkToOutput(url + book_name +"/"+ book_of + chapter); 
+    }
+
+    //https://gist.github.com/kerimdzhanov/7529623
+    function getRandomInt(min, max) {
+     return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    /*http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object*/
+    function pickRandomProperty(obj) {
+        var result;
+        var count = 0;
+        for (var prop in obj)
+            if (Math.random() < 1/++count)
+            result = prop;
+        return result;
+    }
+
+    function pushLinkToOutput(url){
+        var link_name = url.replace("https://www.lds.org/scriptures/" , "")
+        var link = '<a href="' + url +'" target="_blank" class="scripture_link" >' + link_name + '</a>';
+        $("#output").append(link);
+    }
+
+</script>
+
+
+
+</body>
+</html>
